@@ -7,15 +7,6 @@ class Capacity(models.Model):
     adult = models.IntegerField()
 
 
-class Residence(models.Model):
-    title = models.CharField(max_length=50)
-    capacity = models.ForeignKey(Capacity, on_delete=models.CASCADE)
-    is_vacant = models.BooleanField(default=True)
-    price = models.BigIntegerField()
-    date_created = models.DateTimeField()
-    date_updated = models.DateTimeField()
-
-
 class Customer(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
@@ -24,7 +15,16 @@ class Customer(models.Model):
 
 
 class Reservation(models.Model):
-    residence = models.ForeignKey(Residence, on_delete=models.PROTECT)
     reservation_start_date = models.DateTimeField()
     reservation_end_date = models.DateTimeField()
     customers = models.ManyToManyField(Customer)
+
+
+class Residence(models.Model):
+    title = models.CharField(max_length=50)
+    capacity = models.ForeignKey(Capacity, on_delete=models.CASCADE)
+    reserve = models.ManyToManyField(Reservation)
+    is_active = models.BooleanField(default=True)
+    price = models.BigIntegerField()
+    date_created = models.DateTimeField()
+    date_updated = models.DateTimeField()
